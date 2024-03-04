@@ -142,51 +142,6 @@ if minetest.get_modpath("moreores") then
     })
 end
 
-if minetest.get_modpath("ethereal") then
-    multitools.register_multitool("multitools", "crystal", S("Crystal Multitool"), "multitool_crystal.png", 8.0,
-        {
-            full_punch_interval = 0.9,
-            max_drop_level = 3,
-            groupcaps = {
-            cracky = {times={[1]=1.8, [2]=0.8, [3]=0.40}, uses=20, maxlevel=3},
-            crumbly = {times={[1]=0.70, [2]=0.35, [3]=0.20}, uses=50, maxlevel=2},
-            choppy = {times={[1]=1.75, [2]=0.45, [3]=0.45}, uses=50, maxlevel=2},
-            snappy = {times={[1]=1.70, [2]=0.70, [3]=0.25}, uses=50, maxlevel=3},
-            },
-            damage_groups = {fleshy=10},
-        },
-        {breaks = "default_tool_breaks"}
-    )
-
-    -- From Etheral mod
-    local old_handle_node_drops = minetest.handle_node_drops
-
-    function minetest.handle_node_drops(pos, drops, digger)
-
-        -- are we holding Crystal Multitool?
-        if digger:get_wielded_item():get_name() ~= "multitools:multitool_crystal" then
-            return old_handle_node_drops(pos, drops, digger)
-        end
-
-        local nn = minetest.get_node(pos).name
-
-        if minetest.get_item_group(nn, "crumbly") == 0 and minetest.get_item_group(nn, "cracky") == 0 then
-            return old_handle_node_drops(pos, drops, digger)
-        end
-
-        return old_handle_node_drops(pos, {ItemStack(nn)}, digger)
-    end
-
-    minetest.register_craft({
-        output = "multitools:multitool_crystal",
-        recipe = {
-            {"", "ethereal:shovel_crystal", ""},
-            {"ethereal:axe_crystal", "ethereal:pick_crystal", "ethereal:sword_crystal"},
-        }
-    })
-
-end
-
 if minetest.get_modpath("mobs_monster") or minetest.get_modpath("lavastuff") then
     local img = "multitool_lava.png"
     if minetest.get_modpath("lavastuff") then
